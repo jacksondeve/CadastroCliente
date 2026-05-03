@@ -1,0 +1,14 @@
+USE corporativo
+
+GO
+
+CREATE OR ALTER PROCEDURE PROC_DELETE_CLIENTES(
+
+	@IdCliente INT
+)
+
+AS
+	BEGIN	
+		DELETE FROM clientes WHERE IdCliente = @IdCliente
+
+	END

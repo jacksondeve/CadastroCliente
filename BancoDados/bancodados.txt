@@ -1,0 +1,2 @@
+{"IdCliente":0,"Documento":"15325315","Nome":"vargil","Sexo":"M","Email":"vargil@gmail.com","Telefone":"1414124","UF":"pr"}
+{"IdCliente":0,"Documento":"string","Nome":"string","Sexo":"string","Email":"string","Telefone":"string","UF":"string"}
