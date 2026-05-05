@@ -1,8 +1,5 @@
 ﻿using CadastroCliente.Models;
-using System.Collections.Generic;
-using System;
-using Microsoft.Data.SqlClient;
-using System.Data;
+using Npgsql;
 
 namespace CadastroClientes.Models.Repository
 {
