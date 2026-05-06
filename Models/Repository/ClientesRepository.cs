@@ -19,7 +19,7 @@ namespace CadastroClientes.Models.Repository
             {
                 conn.Open();
 
-                string sql = @"INSERT INTO clientes 
+                string sql = @"INSERT INTO public.clientes 
                 (documento, nome, sexo, email, telefone, uf)
                 VALUES (@Documento, @Nome, @Sexo, @Email, @Telefone, @UF)";
 
@@ -46,7 +46,7 @@ namespace CadastroClientes.Models.Repository
             {
                 conn.Open();
 
-                string sql = "SELECT * FROM clientes";
+                string sql = "SELECT * FROM public.clientes";
 
                 using (var cmd = new NpgsqlCommand(sql, conn))
                 using (var reader = cmd.ExecuteReader())
@@ -78,7 +78,7 @@ namespace CadastroClientes.Models.Repository
             {
                 conn.Open();
 
-                string sql = "DELETE FROM clientes WHERE idcliente = @Id";
+                string sql = "DELETE FROM public.clientes WHERE idcliente = @Id";
 
                 using (var cmd = new NpgsqlCommand(sql, conn))
                 {
@@ -95,7 +95,7 @@ namespace CadastroClientes.Models.Repository
             {
                 conn.Open();
 
-                string sql = @"UPDATE clientes SET
+                string sql = @"UPDATE public.clientes SET
                              documento=@Documento,
                              nome=@Nome,
                              sexo=@Sexo,
@@ -129,7 +129,7 @@ namespace CadastroClientes.Models.Repository
             {
                 conn.Open();
 
-                string sql = "SELECT * FROM clientes WHERE idcliente = @Id";
+                string sql = "SELECT * FROM public.clientes WHERE idcliente = @Id";
 
                 using (var cmd = new NpgsqlCommand(sql, conn))
                 {
