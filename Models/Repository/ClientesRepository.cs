@@ -1,6 +1,6 @@
 ﻿using CadastroCliente.Models;
 using Npgsql;
-
+using System.Data;
 namespace CadastroClientes.Models.Repository
 {
     public class ClientesRepository
@@ -15,114 +15,16 @@ namespace CadastroClientes.Models.Repository
         // INSERT
         public void SalvarCliente(Cliente cliente)
         {
-            try
+            using (var conn = _appConfig.GetConnection())
             {
-                using (SqlConnection connection = new SqlConnection(_appConfig.ConnectionString))
+                conn.Open();
+
+                string sql = @"INSERT INTO clientes 
+                (documento, nome, sexo, email, telefone, uf)
+                VALUES (@Documento, @Nome, @Sexo, @Email, @Telefone, @UF)";
+
+                using (var cmd = new NpgsqlCommand(sql, conn))
                 {
-                    Console.WriteLine(_appConfig.ConnectionString);
-                    connection.Open();
-
-
-                    using (SqlCommand cmd = new SqlCommand("PROC_INSERT_CLIENTES", connection))
-                    {
-                        cmd.CommandType = CommandType.StoredProcedure;
-
-                        cmd.Parameters.AddWithValue("@IdCliente", cliente.IdCliente);
-                        cmd.Parameters.AddWithValue("@Documento", cliente.Documento);
-                        cmd.Parameters.AddWithValue("@Nome", cliente.Nome);
-                        cmd.Parameters.AddWithValue("@Sexo", cliente.Sexo);
-                        cmd.Parameters.AddWithValue("@Email", cliente.Email);
-                        cmd.Parameters.AddWithValue("@Telefone", cliente.Telefone);
-                        cmd.Parameters.AddWithValue("@UF", cliente.UF);
-
-                        cmd.ExecuteNonQuery();
-                    }
-                }
-            }
-            catch(Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                throw;
-            }
-        }
-
-        // SELECT
-        public List<Cliente> Listar()
-        {
-            List<Cliente> retorno = new List<Cliente>();
-
-            using (SqlConnection connection = new SqlConnection(_appConfig.ConnectionString))
-            {
-                connection.Open();
-
-                using (SqlCommand cmd = new SqlCommand("PROC_SELECT_CLIENTE", connection))
-                {
-                    cmd.CommandType = CommandType.StoredProcedure;
-
-                    using (SqlDataReader reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            Cliente cliente = new Cliente();
-
-                            cliente.IdCliente = Convert.ToInt32(reader["IdCliente"]);
-                            cliente.Documento = reader["Documento"].ToString();
-                            cliente.Nome = reader["Nome"].ToString();
-                            cliente.Email = reader["Email"].ToString();
-                            cliente.Sexo = reader["Sexo"].ToString();
-                            cliente.Telefone = reader["Telefone"].ToString();
-                            cliente.UF = reader["UF"].ToString();
-
-                            retorno.Add(cliente);
-                        }
-                    }
-                }
-            }
-            Console.WriteLine("salvo com sucesso");
-
-            return retorno;
-        }
-
-        // DELETE
-        public bool Delete(int IdCliente)
-        {
-            bool retorno = false;
-
-            using (SqlConnection connection = new SqlConnection(_appConfig.ConnectionString))
-            {
-                connection.Open();
-
-                using (SqlCommand cmd = new SqlCommand("PROC_DELETE_CLIENTES", connection))
-                {
-                    cmd.CommandType = CommandType.StoredProcedure;
-
-                    cmd.Parameters.AddWithValue("@IdCliente", IdCliente);
-
-                    int linhas = cmd.ExecuteNonQuery();
-
-                    if (linhas > 0)
-                    {
-                        retorno = true;
-                    }
-                }
-            }
-
-            return retorno;
-        }
-
-        public bool Atualizar(Cliente cliente)
-        {
-            bool atualizado = false;
-
-            using (SqlConnection connection = new SqlConnection(_appConfig.ConnectionString))
-            {
-                connection.Open();
-
-                using (SqlCommand cmd = new SqlCommand("PROC_UPDATE_CLIENTES", connection))
-                {
-                    cmd.CommandType = CommandType.StoredProcedure;
-
-                    cmd.Parameters.AddWithValue("@IdCliente", cliente.IdCliente);
                     cmd.Parameters.AddWithValue("@Documento", cliente.Documento);
                     cmd.Parameters.AddWithValue("@Nome", cliente.Nome);
                     cmd.Parameters.AddWithValue("@Sexo", cliente.Sexo);
@@ -130,51 +32,129 @@ namespace CadastroClientes.Models.Repository
                     cmd.Parameters.AddWithValue("@Telefone", cliente.Telefone);
                     cmd.Parameters.AddWithValue("@UF", cliente.UF);
 
-                    int linhas = cmd.ExecuteNonQuery();
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
 
-                    if (linhas > 0)
+        // SELECT
+        public List<Cliente> Listar()
+        {
+            List<Cliente> lista = new List<Cliente>();
+
+            using (var conn = _appConfig.GetConnection())
+            {
+                conn.Open();
+
+                string sql = "SELECT * FROM clientes";
+
+                using (var cmd = new NpgsqlCommand(sql, conn))
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
                     {
-                        atualizado = true;
+                        lista.Add(new Cliente
+                        {
+                            IdCliente = Convert.ToInt32(reader["idcliente"]),
+                            Documento = reader["documento"].ToString(),
+                            Nome = reader["nome"].ToString(),
+                            Email = reader["email"].ToString(),
+                            Sexo = reader["sexo"].ToString(),
+                            Telefone = reader["telefone"].ToString(),
+                            UF = reader["uf"].ToString()
+                        });
                     }
                 }
             }
 
-            return atualizado;
+            return lista;
+        }
+
+
+        // DELETE
+        public bool Delete(int id)
+        {
+            using (var conn = _appConfig.GetConnection())
+            {
+                conn.Open();
+
+                string sql = "DELETE FROM clientes WHERE idcliente = @Id";
+
+                using (var cmd = new NpgsqlCommand(sql, conn))
+                {
+                    cmd.Parameters.AddWithValue("@Id", id);
+
+                    return cmd.ExecuteNonQuery() > 0;
+                }
+            }
+        }
+
+        public bool Atualizar(Cliente cliente)
+        {
+            using (var conn = _appConfig.GetConnection())
+            {
+                conn.Open();
+
+                string sql = @"UPDATE clientes SET
+                             documento=@Documento,
+                             nome=@Nome,
+                             sexo=@Sexo,
+                             email=@Email,
+                             telefone=@Telefone,
+                             uf=@UF
+                             WHERE idcliente=@Id";
+
+                
+
+                using (var cmd = new NpgsqlCommand(sql, conn))
+                {
+                    cmd.Parameters.AddWithValue("@Id", cliente.IdCliente);
+                    cmd.Parameters.AddWithValue("@Documento", cliente.Documento);
+                    cmd.Parameters.AddWithValue("@Nome", cliente.Nome);
+                    cmd.Parameters.AddWithValue("@Sexo", cliente.Sexo);
+                    cmd.Parameters.AddWithValue("@Email", cliente.Email);
+                    cmd.Parameters.AddWithValue("@Telefone", cliente.Telefone);
+                    cmd.Parameters.AddWithValue("@UF", cliente.UF);
+
+                    return cmd.ExecuteNonQuery() > 0;
+
+                }
+            }
+            return false;
         }
 
         public Cliente GetById(int id)
         {
-            Cliente cliente = null;
-
-            using (SqlConnection connection = new SqlConnection(_appConfig.ConnectionString))
+            using (var conn = _appConfig.GetConnection())
             {
-                connection.Open();
+                conn.Open();
 
-                using (SqlCommand cmd = new SqlCommand("PROC_GET_CLIENTE", connection))
+                string sql = "SELECT * FROM clientes WHERE idcliente = @Id";
+
+                using (var cmd = new NpgsqlCommand(sql, conn))
                 {
-                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@Id", id);
 
-                    cmd.Parameters.AddWithValue("@IdCliente", id);
-
-                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    using (var reader = cmd.ExecuteReader())
                     {
                         if (reader.Read())
                         {
-                            cliente = new Cliente();
-
-                            cliente.IdCliente = Convert.ToInt32(reader["IdCliente"]);
-                            cliente.Documento = reader["Documento"].ToString();
-                            cliente.Nome = reader["Nome"].ToString();
-                            cliente.Email = reader["Email"].ToString();
-                            cliente.Sexo = reader["Sexo"].ToString();
-                            cliente.Telefone = reader["Telefone"].ToString();
-                            cliente.UF = reader["UF"].ToString();
+                            return new Cliente
+                            {
+                                IdCliente = Convert.ToInt32(reader["idcliente"]),
+                                Documento = reader["documento"].ToString(),
+                                Nome = reader["nome"].ToString(),
+                                Email = reader["email"].ToString(),
+                                Sexo = reader["sexo"].ToString(),
+                                Telefone = reader["telefone"].ToString(),
+                                UF = reader["uf"].ToString()
+                            };
                         }
                     }
                 }
             }
 
-            return cliente;
+            return null;
         }
     }
 }
