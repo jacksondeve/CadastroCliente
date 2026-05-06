@@ -186,11 +186,11 @@
         uf: document.getElementById("uf").value
     };
 
-    let url = "https://cadastrocliente-api.onrender.com/Cliente";
+    let url = "https://cadastrocliente-api.onrender.com/api/Cliente/Salvar";
     let metodo = "POST";
 
     if (id) {
-        url = `https://cadastrocliente-api.onrender.com/Cliente/${id}`;
+        url = "https://cadastrocliente-api.onrender.com/api/Cliente/Atualizar";
         metodo = "PUT";
     }
 
@@ -219,7 +219,7 @@
     // 🔹 LISTAR
     async function carregarClientes() {
     try {
-        const response = await fetch("https://cadastrocliente-api.onrender.com/Cliente");
+        const response = await fetch("https://cadastrocliente-api.onrender.com/api/Cliente/Listar");
 
         if (!response.ok) throw new Error("Erro ao buscar clientes");
 
@@ -257,7 +257,7 @@
     if (!confirm("Deseja excluir?")) return;
 
     try {
-        await fetch(`https://cadastrocliente-api.onrender.com/Cliente/${id}`, {
+        await fetch(`https://cadastrocliente-api.onrender.com/api/Cliente/Deletar/${id}`, {
         method: "DELETE"
         });
 
@@ -272,7 +272,7 @@
     // 🔹 EDITAR
     async function editarCliente(id) {
     try {
-        const response = await fetch(`https://cadastrocliente-api.onrender.com/Cliente/${id}`);
+        const response = await fetch(`https://cadastrocliente-api.onrender.com/api/Cliente/${id}`);
         const cliente = await response.json();
 
         document.getElementById("documento").value = cliente.documento;
