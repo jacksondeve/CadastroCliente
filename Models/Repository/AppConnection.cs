@@ -1,5 +1,6 @@
-﻿using System;
-using Npgsql;
+﻿using Npgsql;
+using System;
+using System.Collections;
 
 public class AppConnection
 {
@@ -7,6 +8,11 @@ public class AppConnection
 
     public AppConnection(IConfiguration configuration)
     {
+        // 🔍 DEBUG - lista todas variáveis de ambiente
+        foreach (DictionaryEntry env in Environment.GetEnvironmentVariables())
+        {
+            Console.WriteLine($"{env.Key} = {env.Value}");
+        }
         _connectionString = Environment.GetEnvironmentVariable("ConnectionStrings__DefaultConnection");
 
         Console.WriteLine("CONN STRING: " + _connectionString);
