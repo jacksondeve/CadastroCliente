@@ -274,7 +274,8 @@
     try {
         const response = await fetch(`https://cadastrocliente-api.onrender.com/api/Cliente/${id}`);
         const cliente = await response.json();
-
+        console.log("ID:", id);
+        document.getElementById("id").value = cliente.idCliente;
         document.getElementById("documento").value = cliente.documento;
         document.getElementById("nome").value = cliente.nome;
         document.getElementById("email").value = cliente.email;
@@ -296,6 +297,7 @@
 
     // 🔹 LIMPAR
     function limparFormulario() {
+    document.getElementById("id").value = "";    
     document.getElementById("documento").value = "";
     document.getElementById("nome").value = "";
     document.getElementById("email").value = "";
