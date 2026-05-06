@@ -7,7 +7,7 @@ public class AppConnection
 
     public AppConnection(IConfiguration configuration)
     {
-        _connectionString = configuration.GetConnectionString("DefaultConnection");
+        _connectionString = Environment.GetEnvironmentVariable("ConnectionStrings__DefaultConnection");
 
         Console.WriteLine("CONN STRING: " + _connectionString);
 
