@@ -1,322 +1,309 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
-<style>
-table, tr, td {border:1px solid black;}
-div {padding:10px; overflow:hidden;}
-</style>
+    <style>
+        table, tr, td {
+            border: 1px solid black;
+        }
 
+        div {
+            padding: 10px;
+            overflow: hidden;
+        }
+    </style>
 </head>
 
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-<div class="container-fluid">
-<a class="navbar-brand" href="#">MeuSistema</a>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
 
-<div class="collapse navbar-collapse">
-<ul class="navbar-nav">
+            <a class="navbar-brand" href="#">MeuSistema</a>
 
-<li class="nav-item">
-<a href="#" class="nav-link">Vendas</a>
-</li>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">Vendas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">Estoque</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">Contatos</a>
+                    </li>
+                </ul>
+            </div>
 
-<li class="nav-item">
-<a href="#" class="nav-link">Estoque</a>
-</li>
+        </div>
+    </nav>
 
-<li class="nav-item">
-<a href="#" class="nav-link">Contatos</a>
-</li>
+    <!-- CARD -->
+    <div class="card">
 
-</ul>
-</div>
-</div>
-</nav>
+        <div class="card-header">
+            <h3 class="card-title text-center">Clientes Cadastrados</h3>
+        </div>
 
-<div class="card">
+        <div class="card-body">
 
-<div class="card-header">
-<h3 class="card-title text-center">Clientes Cadastrados</h3>
-</div>
+            <!-- BOTÃO NOVO -->
+            <button class="btn btn-primary"
+                    data-bs-toggle="modal"
+                    data-bs-target="#myModal"
+                    onclick="limparFormulario()">
 
-<div class="card-body">
+                <span class="bi bi-plus"></span> Novo
+            </button>
 
-<a data-bs-toggle="modal" data-bs-target="#myModal" class="btn btn-primary">
-<span class="bi bi-plus"></span> Novo
-</a>
+            <!-- TABELA -->
+            <div class="table-responsive mt-3">
 
-<div class="table-responsive">
+                <table id="listaCadastro" class="table table-striped table-hover">
 
-<table id="listaCadastro" class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Documento</th>
+                            <th>Nome</th>
+                            <th>Sexo</th>
+                            <th>Email</th>
+                            <th>Telefone</th>
+                            <th>Estado</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
 
-<thead>
-<tr>
-<th>Documento</th>
-<th>Nome</th>
-<th>Sexo</th>
-<th>Email</th>
-<th>Telefone</th>
-<th>Estado</th>
-<th>Ações</th>
-</tr>
-</thead>
+                    <tbody></tbody>
 
-<tbody>
-</tbody>
+                </table>
 
-</table>
+            </div>
 
-</div>
-</div>
-</div>
+        </div>
+    </div>
 
-<!-- MODAL -->
+    <!-- MODAL -->
+    <div class="modal fade" id="myModal">
 
-<div class="container">
+        <div class="modal-dialog">
 
-<div class="modal fade" id="myModal">
-<div class="modal-dialog">
-<div class="modal-content">
+            <div class="modal-content">
 
-<div class="modal-header">
-<h5 class="modal-title">Cadastro Cliente</h5>
-<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-</div>
+                <div class="modal-header">
+                    <h5 class="modal-title">Cadastro Cliente</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
 
-<div class="modal-body">
+                <div class="modal-body">
 
-<form>
+                    <!-- ID oculto -->
+                    <input type="hidden" id="id">
 
-<fieldset class="mb-4">
-<legend>Dados pessoais</legend>
+                    <form>
 
-<div class="row mb-3">
-<label class="col-sm-3 col-form-label">Documento</label>
-<div class="col-sm-9">
-<input type="text" class="form-control" id="documento">
-</div>
-</div>
+                        <div class="mb-2">
+                            <input type="text" class="form-control" id="documento" placeholder="Documento">
+                        </div>
 
-<div class="row mb-3">
-<label class="col-sm-3 col-form-label">Nome</label>
-<div class="col-sm-9">
-<input type="text" class="form-control" id="nome">
-</div>
-</div>
+                        <div class="mb-2">
+                            <input type="text" class="form-control" id="nome" placeholder="Nome">
+                        </div>
 
-<div class="row mb-3">
-<label class="col-sm-3 col-form-label">Sexo</label>
-<div class="col-sm-9">
+                        <div class="mb-2">
+                            <input type="email" class="form-control" id="email" placeholder="Email">
+                        </div>
 
-<div class="form-check form-check-inline">
-<input class="form-check-input" type="radio" name="sexo" value="Feminino">
-<label class="form-check-label">Feminino</label>
-</div>
+                        <div class="mb-2">
+                            <input type="text" class="form-control" id="telefone" placeholder="Telefone">
+                        </div>
 
-<div class="form-check form-check-inline">
-<input class="form-check-input" type="radio" name="sexo" value="Masculino">
-<label class="form-check-label">Masculino</label>
-</div>
+                        <div class="mb-2">
+                            <select class="form-select" id="uf">
+                                <option value="">Estado</option>
+                                <option value="SP">SP</option>
+                                <option value="RJ">RJ</option>
+                                <option value="SC">SC</option>
+                                <option value="RS">RS</option>
+                            </select>
+                        </div>
 
-</div>
-</div>
+                        <div class="mb-2">
+                            <label>
+                                <input type="radio" name="sexo" value="M"> Masculino
+                            </label>
 
-</fieldset>
+                            <label>
+                                <input type="radio" name="sexo" value="F"> Feminino
+                            </label>
+                        </div>
 
-<fieldset class="mb-4">
-<legend>Contato</legend>
+                        <div class="text-end">
+                            <button type="button"
+                                    class="btn btn-primary"
+                                    onclick="salvarCliente()">
+                                Salvar
+                            </button>
+                        </div>
 
-<div class="row mb-3">
-<label class="col-sm-3 col-form-label">Email</label>
-<div class="col-sm-9">
-<input type="email" class="form-control" id="email">
-</div>
-</div>
+                    </form>
 
-<div class="row mb-3">
-<label class="col-sm-3 col-form-label">Telefone</label>
-<div class="col-sm-9">
-<input type="tel" class="form-control" id="telefone">
-</div>
-</div>
+                </div>
 
-<div class="row mb-3">
-<label class="col-sm-3 col-form-label">UF</label>
-<div class="col-sm-9">
+            </div>
 
-<select class="form-select" id="uf">
-<option value="">Estado</option>
-<option value="SC">SC</option>
-<option value="RS">RS</option>
-<option value="SP">SP</option>
-<option value="RJ">RJ</option>
-</select>
+        </div>
 
-</div>
-</div>
-
-</fieldset>
-
-<div class="text-end">
-<button type="button" class="btn btn-primary" onclick="salvaCadastro()">
-<span class="bi bi-save"></span> Gravar
-</button>
-</div>
-
-</form>
-
-</div>
-</div>
-</div>
-</div>
-
-</div>
+    </div>
 
 <script>
+    //verificação commit
+    window.onload = carregarClientes;
 
-var linhaEditando = null;
+    let linhaEditando = null;
 
-function salvaCadastro(){
+    // 🔹 SALVAR / EDITAR
+    async function salvarCliente() {
 
-    $.ajax({
-        url: "http://localhost:5252/api/cliente/salvar",
-        type: "POST",
-        contentType: "application/json",
-        data: JSON.stringify({
-            documento: documento,
-            nome: nome,
-            sexo: sexo,
-            email: email,
-            telefone: telefone,
-            uf: uf
-        }),
-        success: function (response) {
+    const id = document.getElementById("id")?.value || null;
 
-            AdicionarLinhaTabela(documento, nome, sexo, email, telefone, uf);
+    const sexoSelecionado = document.querySelector("input[name='sexo']:checked");
 
-            limparFormulario();
+    const cliente = {
+        idCliente: id ? parseInt(id) : 0,
+        documento: document.getElementById("documento").value,
+        nome: document.getElementById("nome").value,
+        sexo: sexoSelecionado ? sexoSelecionado.value : "",
+        email: document.getElementById("email").value,
+        telefone: document.getElementById("telefone").value,
+        uf: document.getElementById("uf").value
+    };
 
-            linhaEditando = null;
+    let url = "https://cadastrocliente-api.onrender.com/Cliente";
+    let metodo = "POST";
 
-            var modal = bootstrap.Modal.getInstance(document.getElementById('myModal'));
-            modal.hide();
-
-        },
-        error: function (error) {
-            console.log("Erro:", error);
-        }
-    });
-
-}
-
-function AdicionarLinhaTabela(documento,nome,sexo,email,telefone,uf){
-
-    var NovaLinha =
-
-    '<tr id="linha'+documento+'">'+
-    '<td>'+documento+'</td>'+
-    '<td>'+nome+'</td>'+
-    '<td>'+sexo+'</td>'+
-    '<td>'+email+'</td>'+
-    '<td>'+telefone+'</td>'+
-    '<td>'+uf+'</td>'+
-    '<td>'+
-    '<button class="btn btn-primary btn-sm" onclick="editarUsuario(\''+documento+'\')">Editar</button> '+
-    '<button class="btn btn-danger btn-sm" onclick="removeUsuario(\''+documento+'\')">Excluir</button>'+
-    '</td>'+
-    '</tr>';
-
-    $('#listaCadastro tbody').prepend(NovaLinha);
-
+    if (id) {
+        url = `https://cadastrocliente-api.onrender.com/Cliente/${id}`;
+        metodo = "PUT";
     }
 
+    try {
+        const response = await fetch(url, {
+        method: metodo,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(cliente)
+        });
 
-function removeUsuario(documento){
+        if (!response.ok) throw new Error("Erro ao salvar");
 
-    $.ajax({
-        url: "http://localhost:5252/api/cliente/delete?id=" + documento,
-        type: "DELETE"
-    });
+        alert("Salvo com sucesso!");
 
+        bootstrap.Modal.getInstance(document.getElementById('myModal')).hide();
+
+        limparFormulario();
+        carregarClientes();
+
+    } catch (err) {
+        console.error(err);
+        alert("Erro ao salvar cliente");
+    }
     }
 
-    function editarUsuario(documento) {
+    // 🔹 LISTAR
+    async function carregarClientes() {
+    try {
+        const response = await fetch("https://cadastrocliente-api.onrender.com/Cliente");
 
+        if (!response.ok) throw new Error("Erro ao buscar clientes");
 
-        var linha = $("#linha"+documento);
+        const clientes = await response.json();
 
-        var nome = linha.find("td:eq(1)").text();
-        var sexo = linha.find("td:eq(2)").text();
-        var email = linha.find("td:eq(3)").text();
-        var telefone = linha.find("td:eq(4)").text();
-        var uf = linha.find("td:eq(5)").text();
+        const tabela = document.querySelector("#listaCadastro tbody");
+        tabela.innerHTML = "";
 
-        $("#documento").val(documento);
-        $("#nome").val(nome);
-        $("#email").val(email);
-        $("#telefone").val(telefone);
-        $("#uf").val(uf);
+        clientes.forEach(c => {
+        tabela.innerHTML += `
+            <tr>
+            <td>${c.idCliente}</td>
+            <td>${c.documento}</td>
+            <td>${c.nome}</td>
+            <td>${c.sexo}</td>
+            <td>${c.email}</td>
+            <td>${c.telefone}</td>
+            <td>${c.uf}</td>
+            <td>
+                <button class="btn btn-warning btn-sm" onclick="editarCliente(${c.idCliente})">Editar</button>
+                <button class="btn btn-danger btn-sm" onclick="deletarCliente(${c.idCliente})">Excluir</button>
+            </td>
+            </tr>
+        `;
+        });
 
-        $("input[name='sexo'][value='"+sexo+"']").prop("checked",true);
+    } catch (err) {
+        console.error(err);
+        alert("Erro ao carregar clientes");
+    }
+    }
 
-        linhaEditando = documento;
+    // 🔹 DELETE
+    async function deletarCliente(id) {
+    if (!confirm("Deseja excluir?")) return;
 
-        var modal = new bootstrap.Modal(document.getElementById('myModal'));
+    try {
+        await fetch(`https://cadastrocliente-api.onrender.com/Cliente/${id}`, {
+        method: "DELETE"
+        });
+
+        carregarClientes();
+
+    } catch (err) {
+        console.error(err);
+        alert("Erro ao excluir");
+    }
+    }
+
+    // 🔹 EDITAR
+    async function editarCliente(id) {
+    try {
+        const response = await fetch(`https://cadastrocliente-api.onrender.com/Cliente/${id}`);
+        const cliente = await response.json();
+
+        document.getElementById("documento").value = cliente.documento;
+        document.getElementById("nome").value = cliente.nome;
+        document.getElementById("email").value = cliente.email;
+        document.getElementById("telefone").value = cliente.telefone;
+        document.getElementById("uf").value = cliente.uf;
+
+        document.querySelector(`input[name='sexo'][value='${cliente.sexo}']`).checked = true;
+
+        linhaEditando = id;
+
+        const modal = new bootstrap.Modal(document.getElementById('myModal'));
         modal.show();
 
-}
-
-function limparFormulario(){
-
-        $("#documento").val("");
-        $("#nome").val("");
-        $("#email").val("");
-        $("#telefone").val("");
-        $("#uf").val("");
-        $("input[name='sexo']").prop("checked",false);
-
-
-
+    } catch (err) {
+        console.error(err);
+        alert("Erro ao editar cliente");
+    }
     }
 
-
-    function carregarClientes() {
-
-        $.ajax({
-            url: "http://localhost:5252/api/cliente/listar",
-            type: "GET",
-            success: function (data) {
-
-                $('#listaCadastro tbody').empty();
-
-                data.forEach(function (cliente) {
-                    AdicionarLinhaTabela(
-                        cliente.documento,
-                        cliente.nome,
-                        cliente.sexo,
-                        cliente.email,
-                        cliente.telefone,
-                        cliente.uf
-                    );
-                });
-            }
-        });
+    // 🔹 LIMPAR
+    function limparFormulario() {
+    document.getElementById("documento").value = "";
+    document.getElementById("nome").value = "";
+    document.getElementById("email").value = "";
+    document.getElementById("telefone").value = "";
+    document.getElementById("uf").value = "";
+    document.querySelectorAll("input[name='sexo']").forEach(r => r.checked = false);
     }
-
-    $(document).ready(function () {
-        carregarClientes();
-    });
-
-</script>
+</script>    
 
 </body>
 </html>
